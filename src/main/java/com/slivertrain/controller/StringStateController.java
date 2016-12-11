@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigInteger;
 
 /**
  * Created by ryan.zhu on 9/12/2016.
@@ -44,11 +45,11 @@ public class StringStateController {
      * @return sum result (integer) and status 200, or status 400
      */
     @RequestMapping(value = "/sum", method = RequestMethod.GET)
-    public ResponseEntity<Integer> getSum(HttpSession httpSession) {
+    public ResponseEntity<BigInteger> getSum(HttpSession httpSession) {
         try {
-            Integer sum = stringStateService.getSum(httpSession);
+            BigInteger sum = stringStateService.getSum(httpSession);
 
-            return new ResponseEntity<Integer>(sum, HttpStatus.OK);
+            return new ResponseEntity<BigInteger>(sum, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
