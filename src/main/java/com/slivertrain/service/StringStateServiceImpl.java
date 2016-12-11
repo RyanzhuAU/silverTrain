@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+import java.math.BigInteger;
 
 /**
  * Created by ryan.zhu on 11/12/2016.
@@ -54,9 +55,9 @@ public class StringStateServiceImpl implements StringStateService {
      * @return Integer sum result
      * @throws Exception
      */
-    public Integer getSum(HttpSession httpSession) throws Exception {
+    public BigInteger getSum(HttpSession httpSession) throws Exception {
         try {
-            Integer sum = 0;
+            BigInteger sum = BigInteger.valueOf(0);
             StringState state = getStateFromDB(httpSession);
 
             if (StringUtils.isNotBlank(state.getState())) {
@@ -65,7 +66,7 @@ public class StringStateServiceImpl implements StringStateService {
 
                 for (String number : numbers) {
                     if (StringUtils.isNotBlank(number)) {
-                        sum += Integer.valueOf(number);
+                        sum = sum.add(new BigInteger(number));
                     }
                 }
             }
