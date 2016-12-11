@@ -10,13 +10,13 @@ import java.math.BigInteger;
  */
 public interface StringStateService {
 
-    public String getState(HttpSession httpSession) throws Exception;
+    public String getState(String userId) throws Exception;
 
-    public BigInteger getSum(HttpSession httpSession) throws Exception;
+    public BigInteger getSum(String userId) throws Exception;
 
-    public String getChars(HttpSession httpSession) throws Exception;
+    public String getChars(String userId) throws Exception;
 
-    public StringState addChars(HttpSession httpSession, String json) throws Exception;
+    public StringState addChars(String userId, String json) throws Exception;
 
-    public void deleteChars(HttpSession httpSession, String character) throws Exception;
+    public void deleteChars(String userId, String character) throws Exception;
 }

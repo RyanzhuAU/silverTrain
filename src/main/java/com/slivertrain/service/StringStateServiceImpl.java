@@ -30,13 +30,13 @@ public class StringStateServiceImpl implements StringStateService {
     /**
      * GET /state - returns the current state
      *
-     * @param httpSession
+     * @param userId
      * @return the current state
      * @throws Exception
      */
-    public String getState(HttpSession httpSession) throws Exception {
+    public String getState(String userId) throws Exception {
         try {
-            StringState state = getStateFromDB(httpSession);
+            StringState state = getStateFromDB(userId);
 
             logger.info("userId: \"" + state.getUserId() + "\", check the current state.");
 
@@ -51,14 +51,14 @@ public class StringStateServiceImpl implements StringStateService {
      * GET /sum - sums all numbers in a string, e.g. “5abc141def” returns 146, if there are no numbers
      * return 0
      *
-     * @param httpSession
+     * @param userId
      * @return Integer sum result
      * @throws Exception
      */
-    public BigInteger getSum(HttpSession httpSession) throws Exception {
+    public BigInteger getSum(String userId) throws Exception {
         try {
             BigInteger sum = BigInteger.valueOf(0);
-            StringState state = getStateFromDB(httpSession);
+            StringState state = getStateFromDB(userId);
 
             if (StringUtils.isNotBlank(state.getState())) {
                 String filtered = state.getState().replaceAll("\\D+", " ");
@@ -82,13 +82,13 @@ public class StringStateServiceImpl implements StringStateService {
     /**
      * GET /chars - shows the current state without numbers, e.g. “5abc141def” returns abcdef
      *
-     * @param httpSession
+     * @param userId
      * @return String - the current state without numbers
      * @throws Exception
      */
-    public String getChars(HttpSession httpSession) throws Exception {
+    public String getChars(String userId) throws Exception {
         try {
-            StringState state = getStateFromDB(httpSession);
+            StringState state = getStateFromDB(userId);
 
             String chars = state.getState().replaceAll("\\d+", "");
 
@@ -104,12 +104,12 @@ public class StringStateServiceImpl implements StringStateService {
      * POST /chars - adds the character/s to the string state
      * e.g. with JSON input {“character”:”a”,”amount”:3} adds “aaa” to the state string
      *
-     * @param httpSession
+     * @param userId
      * @param json
      * @return StringState object
      * @throws Exception
      */
-    public StringState addChars(HttpSession httpSession, String json) throws Exception {
+    public StringState addChars(String userId, String json) throws Exception {
         try {
             String tempState = "";
 
@@ -119,7 +119,7 @@ public class StringStateServiceImpl implements StringStateService {
             String character = stringStateRep.getCharacter();
             Integer amount = stringStateRep.getAmount();
 
-            StringState state = getStateFromDB(httpSession);
+            StringState state = getStateFromDB(userId);
 
             if (character.length() > 1 || !character.matches("[A-Za-z1-9]")) {
                 throw new Exception("Error occur.");
@@ -149,11 +149,11 @@ public class StringStateServiceImpl implements StringStateService {
     /**
      * DELETE /chars/<character> - deletes the last occurrence of the character in the state string
      *
-     * @param httpSession
+     * @param userId
      * @param character
      * @throws Exception
      */
-    public void deleteChars(HttpSession httpSession, String character) throws Exception {
+    public void deleteChars(String userId, String character) throws Exception {
         try {
             if (character.length() > 1 || !character.matches("[A-Za-z0-9]")) {
 
@@ -161,7 +161,7 @@ public class StringStateServiceImpl implements StringStateService {
 
                 throw new Exception("Error occur.");
             } else {
-                StringState state = getStateFromDB(httpSession);
+                StringState state = getStateFromDB(userId);
                 String stateString = state.getState();
 
                 int index = stateString.lastIndexOf(character);
@@ -184,11 +184,10 @@ public class StringStateServiceImpl implements StringStateService {
     /**
      * Get the current state for current user.
      *
-     * @param httpSession
+     * @param userId
      * @return StringState object for current user
      */
-    private StringState getStateFromDB(HttpSession httpSession) {
-        String userId = httpSession.getId();
+    private StringState getStateFromDB(String userId) {
         StringState state = stringStateRepository.findByUserId(userId);
 
         if (state == null) {
