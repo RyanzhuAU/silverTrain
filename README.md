@@ -4,7 +4,7 @@ How to install:
 
 1. Download or clone from this repository
 
-2. The required database is MySQL. Run the sql script under the "SQL" folder to create the schema.
+2. The required database is MySQL. Run the sql script which is under the "SQL" folder to create the schema.
 
 3. Go to {application folder}\src\main\resources\, modifle the file "application.properties". Change the database username/password.
 
