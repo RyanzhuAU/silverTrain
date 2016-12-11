@@ -12,6 +12,8 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.math.BigInteger;
+
 /**
  * Created by ryan.zhu on 11/12/2016.
  */
@@ -47,9 +49,9 @@ public class StringStateServiceTest {
 
     @Test
     public void testGetSum() throws Exception {
-        Integer sum = stringStateService.getSum(mockSession);
+        BigInteger sum = stringStateService.getSum(mockSession);
 
-        Assert.assertEquals(sum, Integer.valueOf(135));
+        Assert.assertEquals(sum, BigInteger.valueOf(135));
     }
 
     @Test
