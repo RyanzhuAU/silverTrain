@@ -24,17 +24,15 @@ public class StringStateServiceTest {
     private StringStateRepository stringStateRepository;
 
     @Autowired
-    private MockHttpSession mockSession;
-
-    @Autowired
     private WebApplicationContext context;
 
     private StringStateService stringStateService;
+    private String userId;
 
     @Before
     public void setup() throws Exception {
         stringStateService = new StringStateServiceImpl(stringStateRepository);
-        mockSession = new MockHttpSession(context.getServletContext(), "test1");
+        userId = "test1";
 
         StringState stringState = new StringState("test1", "123abc12");
         stringStateRepository.save(stringState);
@@ -42,28 +40,28 @@ public class StringStateServiceTest {
 
     @Test
     public void testGetState() throws Exception {
-        String state = stringStateService.getState(mockSession);
+        String state = stringStateService.getState(userId);
 
         Assert.assertEquals(state, "123abc12");
     }
 
     @Test
     public void testGetSum() throws Exception {
-        BigInteger sum = stringStateService.getSum(mockSession);
+        BigInteger sum = stringStateService.getSum(userId);
 
         Assert.assertEquals(sum, BigInteger.valueOf(135));
     }
 
     @Test
     public void testGetChars() throws Exception {
-        String chars = stringStateService.getChars(mockSession);
+        String chars = stringStateService.getChars(userId);
 
         Assert.assertEquals(chars, "abc");
     }
 
     @Test
     public void testAddChars() throws Exception {
-        StringState stringState = stringStateService.addChars(mockSession, "{\"character\":\"a\", \"amount\":3}");
+        StringState stringState = stringStateService.addChars(userId, "{\"character\":\"a\", \"amount\":3}");
 
         Assert.assertEquals(stringState.getUserId(), "test1");
 
@@ -73,7 +71,7 @@ public class StringStateServiceTest {
 
     @Test
     public void testDeleteChars() throws Exception {
-        stringStateService.deleteChars(mockSession, "1");
+        stringStateService.deleteChars(userId, "1");
 
         String state = stringStateRepository.findByUserId("test1").getState();
         Assert.assertEquals(state, "123abc2");
