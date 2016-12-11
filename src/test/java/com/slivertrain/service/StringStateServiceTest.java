@@ -23,9 +23,6 @@ public class StringStateServiceTest {
     @Autowired
     private StringStateRepository stringStateRepository;
 
-    @Autowired
-    private WebApplicationContext context;
-
     private StringStateService stringStateService;
     private String userId;
 
