@@ -29,7 +29,8 @@ public class StringStateController {
     @RequestMapping(value = "/state", method = RequestMethod.GET)
     public ResponseEntity<String> getState(HttpSession httpSession) {
         try {
-            String state = stringStateService.getState(httpSession);
+            String userId = httpSession.getId();
+            String state = stringStateService.getState(userId);
 
             return new ResponseEntity<String>(state, HttpStatus.OK);
         } catch (Exception e) {
@@ -47,7 +48,8 @@ public class StringStateController {
     @RequestMapping(value = "/sum", method = RequestMethod.GET)
     public ResponseEntity<BigInteger> getSum(HttpSession httpSession) {
         try {
-            BigInteger sum = stringStateService.getSum(httpSession);
+            String userId = httpSession.getId();
+            BigInteger sum = stringStateService.getSum(userId);
 
             return new ResponseEntity<BigInteger>(sum, HttpStatus.OK);
         } catch (Exception e) {
@@ -64,7 +66,8 @@ public class StringStateController {
     @RequestMapping(value = "/chars", method = RequestMethod.GET)
     public ResponseEntity<String> getChars(HttpSession httpSession) {
         try {
-            String chars = stringStateService.getChars(httpSession);
+            String userId = httpSession.getId();
+            String chars = stringStateService.getChars(userId);
 
             return new ResponseEntity<String>(chars, HttpStatus.OK);
         } catch (Exception e) {
@@ -83,7 +86,8 @@ public class StringStateController {
     @RequestMapping(value = "/chars", method = RequestMethod.POST)
     public ResponseEntity<Object> setChars(@RequestBody String json, HttpSession httpSession) {
         try {
-            StringState stringState = stringStateService.addChars(httpSession, json);
+            String userId = httpSession.getId();
+            StringState stringState = stringStateService.addChars(userId, json);
 
             return new ResponseEntity<Object>(stringState, HttpStatus.OK);
 
@@ -102,7 +106,8 @@ public class StringStateController {
     @RequestMapping(value = "/chars/{character}", method = RequestMethod.DELETE)
     public ResponseEntity deleteChar(@PathVariable("character") String character, HttpSession httpSession) {
         try {
-            stringStateService.deleteChars(httpSession, character);
+            String userId = httpSession.getId();
+            stringStateService.deleteChars(userId, character);
 
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception e) {
