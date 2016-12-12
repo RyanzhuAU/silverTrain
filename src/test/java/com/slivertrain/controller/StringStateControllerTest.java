@@ -71,7 +71,7 @@ public class StringStateControllerTest {
         this.mockMvc.perform(get("/state")
                 .session(this.mockSession))
                 .andExpect(status().isOk())
-                .andExpect(content().string("aa11cc"));
+                .andExpect(content().string("{\"userId\":\"" + this.mockSession.getId() + "\",\"state\":\"aa11cc\"}"));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class StringStateControllerTest {
         this.mockMvc.perform(get("/sum")
                 .session(this.mockSession))
                 .andExpect(status().isOk())
-                .andExpect(content().string("11"));
+                .andExpect(content().string("{\"userId\":\"" + this.mockSession.getId() + "\",\"sum\":11}"));
     }
 
     @Test
@@ -87,7 +87,7 @@ public class StringStateControllerTest {
         this.mockMvc.perform(get("/chars")
                 .session(this.mockSession))
                 .andExpect(status().isOk())
-                .andExpect(content().string("aacc"));
+                .andExpect(content().string("{\"userId\":\"" + this.mockSession.getId() + "\",\"chars\":\"aacc\"}"));
     }
 
     @Test
@@ -95,12 +95,14 @@ public class StringStateControllerTest {
         //test the normal delete scenario
         this.mockMvc.perform(delete("/chars/a")
                 .session(this.mockSession))
-                .andExpect(status().isOk());
-
-        this.mockMvc.perform(get("/state")
-                .session(this.mockSession))
                 .andExpect(status().isOk())
-                .andExpect(content().string("a11cc"));
+                .andExpect(content().string("{\"userId\":\"" + this.mockSession.getId() + "\",\"state\":\"a11cc\"}"));
+
+//
+//        this.mockMvc.perform(get("/state")
+//                .session(this.mockSession))
+//                .andExpect(status().isOk())
+//                .andExpect(content().string("a11cc"));
 
         //test scenario: character in DELETE has to be a single alphanumeric character, otherwise return 400
         this.mockMvc.perform(delete("/chars/[")
@@ -123,11 +125,6 @@ public class StringStateControllerTest {
                 .session(this.mockSession))
                 .andExpect(status().isOk())
                 .andExpect(content().string("{\"userId\":\"" + this.mockSession.getId() + "\",\"state\":\"aa11ccaa\"}"));
-
-        this.mockMvc.perform(get("/state")
-                .session(this.mockSession))
-                .andExpect(status().isOk())
-                .andExpect(content().string("aa11ccaa"));
 
         //test scenario: character in POST request has to be just one alphanumeric character and amount a number
         //from 1 to 9, otherwise return 400
@@ -160,7 +157,7 @@ public class StringStateControllerTest {
         this.mockMvc.perform(get("/state")
                 .session(this.mockSession))
                 .andExpect(status().isOk())
-                .andExpect(content().string("aa11ccaa"));
+                .andExpect(content().string("{\"userId\":\"" + this.mockSession.getId() + "\",\"state\":\"aa11ccaa\"}"));
 
         stateRep = new StringStateRep("a", 200);
 
@@ -173,7 +170,7 @@ public class StringStateControllerTest {
         this.mockMvc.perform(get("/state")
                 .session(this.mockSession))
                 .andExpect(status().isOk())
-                .andExpect(content().string("aa11ccaa"));
+                .andExpect(content().string("{\"userId\":\"" + this.mockSession.getId() + "\",\"state\":\"aa11ccaa\"}"));
 
         //test scenario: return 400 if the POST request contains invalid JSON
         StringStateRepTest stateRepInvalid = new StringStateRepTest("a", 2, "test");
