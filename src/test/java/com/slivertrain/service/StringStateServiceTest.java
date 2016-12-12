@@ -2,6 +2,8 @@ package com.slivertrain.service;
 
 import com.slivertrain.domain.StringState;
 import com.slivertrain.repository.StringStateRepository;
+import com.slivertrain.representation.CharsRep;
+import com.slivertrain.representation.SumRep;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,23 +39,23 @@ public class StringStateServiceTest {
 
     @Test
     public void testGetState() throws Exception {
-        String state = stringStateService.getState(userId);
+        StringState state = stringStateService.getState(userId);
 
-        Assert.assertEquals(state, "123abc12");
+        Assert.assertEquals(state.getState(), "123abc12");
     }
 
     @Test
     public void testGetSum() throws Exception {
-        BigInteger sum = stringStateService.getSum(userId);
+        SumRep sum = stringStateService.getSum(userId);
 
-        Assert.assertEquals(sum, BigInteger.valueOf(135));
+        Assert.assertEquals(sum.getSum(), BigInteger.valueOf(135));
     }
 
     @Test
     public void testGetChars() throws Exception {
-        String chars = stringStateService.getChars(userId);
+        CharsRep chars = stringStateService.getChars(userId);
 
-        Assert.assertEquals(chars, "abc");
+        Assert.assertEquals(chars.getChars(), "abc");
     }
 
     @Test
@@ -68,9 +70,8 @@ public class StringStateServiceTest {
 
     @Test
     public void testDeleteChars() throws Exception {
-        stringStateService.deleteChars(userId, "1");
+        StringState state = stringStateService.deleteChars(userId, "1");
 
-        String state = stringStateRepository.findByUserId("test1").getState();
-        Assert.assertEquals(state, "123abc2");
+        Assert.assertEquals(state.getState(), "123abc2");
     }
 }
