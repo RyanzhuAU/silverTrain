@@ -1,6 +1,8 @@
 package com.slivertrain.service;
 
 import com.slivertrain.domain.StringState;
+import com.slivertrain.representation.CharsRep;
+import com.slivertrain.representation.SumRep;
 
 import javax.servlet.http.HttpSession;
 import java.math.BigInteger;
@@ -10,13 +12,13 @@ import java.math.BigInteger;
  */
 public interface StringStateService {
 
-    public String getState(String userId) throws Exception;
+    public StringState getState(String userId) throws Exception;
 
-    public BigInteger getSum(String userId) throws Exception;
+    public SumRep getSum(String userId) throws Exception;
 
-    public String getChars(String userId) throws Exception;
+    public CharsRep getChars(String userId) throws Exception;
 
     public StringState addChars(String userId, String json) throws Exception;
 
-    public void deleteChars(String userId, String character) throws Exception;
+    public StringState deleteChars(String userId, String character) throws Exception;
 }

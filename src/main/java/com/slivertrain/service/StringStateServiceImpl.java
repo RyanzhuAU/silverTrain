@@ -3,7 +3,9 @@ package com.slivertrain.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.slivertrain.domain.StringState;
 import com.slivertrain.repository.StringStateRepository;
+import com.slivertrain.representation.CharsRep;
 import com.slivertrain.representation.StringStateRep;
+import com.slivertrain.representation.SumRep;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,13 +36,13 @@ public class StringStateServiceImpl implements StringStateService {
      * @return the current state
      * @throws Exception
      */
-    public String getState(String userId) throws Exception {
+    public StringState getState(String userId) throws Exception {
         try {
             StringState state = getStateFromDB(userId);
 
             logger.info("userId: \"" + state.getUserId() + "\", check the current state.");
 
-            return state.getState();
+            return state;
         } catch (Exception e) {
             throw new Exception("Error occur.");
         }
@@ -52,17 +54,17 @@ public class StringStateServiceImpl implements StringStateService {
      * return 0
      *
      * @param userId
-     * @return Integer sum result
+     * @return SumRep which include the sum result and the userId
      * @throws Exception
      */
-    public BigInteger getSum(String userId) throws Exception {
+    public SumRep getSum(String userId) throws Exception {
         try {
             BigInteger sum = BigInteger.valueOf(0);
             StringState state = getStateFromDB(userId);
 
             if (StringUtils.isNotBlank(state.getState())) {
-                String filtered = state.getState().replaceAll("\\D+", " ");
-                String[] numbers = filtered.split("\\s+");
+//                String filtered = state.getState().replaceAll("\\D+", " ");
+                String[] numbers = state.getState().split("\\D+");
 
                 for (String number : numbers) {
                     if (StringUtils.isNotBlank(number)) {
@@ -71,9 +73,12 @@ public class StringStateServiceImpl implements StringStateService {
                 }
             }
 
+            SumRep sumRep = new SumRep(sum, state.getUserId());
+
             logger.info("userId: \"" + state.getUserId() + "\", sum request.");
 
-            return sum;
+            return sumRep;
+
         } catch (Exception e) {
             throw new Exception("Error occur.");
         }
@@ -83,18 +88,21 @@ public class StringStateServiceImpl implements StringStateService {
      * GET /chars - shows the current state without numbers, e.g. “5abc141def” returns abcdef
      *
      * @param userId
-     * @return String - the current state without numbers
+     * @return CharsRep which include the sum result and the userId
      * @throws Exception
      */
-    public String getChars(String userId) throws Exception {
+    public CharsRep getChars(String userId) throws Exception {
         try {
             StringState state = getStateFromDB(userId);
 
             String chars = state.getState().replaceAll("\\d+", "");
 
+            CharsRep charsRep = new CharsRep(chars, state.getUserId());
+
             logger.info("userId: \"" + state.getUserId() + "\", shows the current state without numbers.");
 
-            return chars;
+            return charsRep;
+
         } catch (Exception e) {
             throw new Exception("Error occur.");
         }
@@ -151,9 +159,10 @@ public class StringStateServiceImpl implements StringStateService {
      *
      * @param userId
      * @param character
+     * @return StringState after delete action
      * @throws Exception
      */
-    public void deleteChars(String userId, String character) throws Exception {
+    public StringState deleteChars(String userId, String character) throws Exception {
         try {
             if (character.length() > 1 || !character.matches("[A-Za-z0-9]")) {
 
@@ -168,12 +177,14 @@ public class StringStateServiceImpl implements StringStateService {
                 if (index >= 0) {
                     stateString = new StringBuilder(stateString).replace(index, index + 1, "").toString();
                     state.setState(stateString);
-                    stringStateRepository.save(state);
+                    state = stringStateRepository.save(state);
 
                     logger.info("userId: \"" + state.getUserId() + "\", deleted: \"{}\".", character);
                 } else {
                     logger.info("userId: \"" + state.getUserId() + "\", there is no character \"{}\" in the current state.", character);
                 }
+
+                return state;
 
             }
         } catch (Exception e) {
