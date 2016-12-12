@@ -1,6 +1,8 @@
 package com.slivertrain.controller;
 
 import com.slivertrain.domain.StringState;
+import com.slivertrain.representation.CharsRep;
+import com.slivertrain.representation.SumRep;
 import com.slivertrain.service.StringStateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,12 +29,12 @@ public class StringStateController {
      * @return state string and status 200, or status 400
      */
     @RequestMapping(value = "/state", method = RequestMethod.GET)
-    public ResponseEntity<String> getState(HttpSession httpSession) {
+    public ResponseEntity<StringState> getState(HttpSession httpSession) {
         try {
             String userId = httpSession.getId();
-            String state = stringStateService.getState(userId);
+            StringState state = stringStateService.getState(userId);
 
-            return new ResponseEntity<String>(state, HttpStatus.OK);
+            return new ResponseEntity<StringState>(state, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -43,15 +45,15 @@ public class StringStateController {
      * return 0
      *
      * @param httpSession
-     * @return sum result (integer) and status 200, or status 400
+     * @return sum result and status 200, or status 400
      */
     @RequestMapping(value = "/sum", method = RequestMethod.GET)
-    public ResponseEntity<BigInteger> getSum(HttpSession httpSession) {
+    public ResponseEntity<SumRep> getSum(HttpSession httpSession) {
         try {
             String userId = httpSession.getId();
-            BigInteger sum = stringStateService.getSum(userId);
+            SumRep sumRep = stringStateService.getSum(userId);
 
-            return new ResponseEntity<BigInteger>(sum, HttpStatus.OK);
+            return new ResponseEntity<SumRep>(sumRep, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -64,12 +66,12 @@ public class StringStateController {
      * @return the current state without numbers and status 200, or status 400
      */
     @RequestMapping(value = "/chars", method = RequestMethod.GET)
-    public ResponseEntity<String> getChars(HttpSession httpSession) {
+    public ResponseEntity<CharsRep> getChars(HttpSession httpSession) {
         try {
             String userId = httpSession.getId();
-            String chars = stringStateService.getChars(userId);
+            CharsRep chars = stringStateService.getChars(userId);
 
-            return new ResponseEntity<String>(chars, HttpStatus.OK);
+            return new ResponseEntity<CharsRep>(chars, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
@@ -104,12 +106,12 @@ public class StringStateController {
      * @return status 200 or status 400
      */
     @RequestMapping(value = "/chars/{character}", method = RequestMethod.DELETE)
-    public ResponseEntity deleteChar(@PathVariable("character") String character, HttpSession httpSession) {
+    public ResponseEntity<StringState> deleteChar(@PathVariable("character") String character, HttpSession httpSession) {
         try {
             String userId = httpSession.getId();
-            stringStateService.deleteChars(userId, character);
+            StringState state = stringStateService.deleteChars(userId, character);
 
-            return new ResponseEntity(HttpStatus.OK);
+            return new ResponseEntity<StringState>(state, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
