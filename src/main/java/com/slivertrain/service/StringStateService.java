@@ -12,13 +12,13 @@ import java.math.BigInteger;
  */
 public interface StringStateService {
 
-    public StringState getState(String userId) throws Exception;
+    StringState getState(String userId) throws Exception;
 
-    public SumRep getSum(String userId) throws Exception;
+    SumRep getSum(String userId) throws Exception;
 
-    public CharsRep getChars(String userId) throws Exception;
+    CharsRep getChars(String userId) throws Exception;
 
-    public StringState addChars(String userId, String json) throws Exception;
+    StringState addChars(String userId, String json) throws Exception;
 
-    public StringState deleteChars(String userId, String character) throws Exception;
+    StringState deleteChars(String userId, String character) throws Exception;
 }
